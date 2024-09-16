@@ -1,57 +1,25 @@
 # Sistema de Gerenciamento de Livros - Biblioteca Télos
 
-Este repositório contém o código SQL para a criação e manipulação de um sistema de gerenciamento de livros para uma biblioteca fictícia, Biblioteca TÉLOS. O sistema permite realizar operações como empréstimo e devolução de livros, além de gerenciar o catálogo de livros e os registros de usuários. 
+Este repositório contém o código SQL para a criação e manipulação de um sistema de gerenciamento de livros para a biblioteca fictícia **Télos Library**. O sistema permite realizar operações como empréstimo e devolução de livros, além de gerenciar o catálogo de livros e os registros de usuários.
 
-Este projeto foi proposto pelo mentor **[Renato Rodrigo Chinaglia](https://www.linkedin.com/in/rodrigochinaglia)**, do **programa Afro Digital da [Télos Conecta](https://www.telosconecta.com)**.
+Este projeto foi proposto pelo mentor **[Renato Rodrigo Chinaglia](https://www.linkedin.com/in/rodrigochinaglia)**, com mentoria do **[Vinícius Penha](https://www.linkedin.com/in/vinicius12)** do **programa Afro Digital da [Télos Conecta](https://www.telosconecta.com)**.
 
 ## Estrutura do Banco de Dados
 
-O banco de dados consiste em três tabelas principais:
+O banco de dados `tLibrary` é composto pelas seguintes tabelas:
 
-### 1. Livros (Livros)
-- **livro_id**: ID único do livro (chave primária, autoincrementada).
-- **titulo**: Título do livro.
-- **autor**: Autor do livro.
-- **genero**: Gênero do livro.
-- **ano_publicacao**: Ano de publicação do livro.
 
-### 2. Usuários (Usuarios)
-- **usuario_id**: ID único do usuário (chave primária, autoincrementada).
-- **nome**: Nome do usuário.
-- **email**: Email do usuário.
-
-### 3. Empréstimos (Emprestimos)
-- **emprestimo_id**: ID único do empréstimo (chave primária, autoincrementada).
-- **livro_id**: ID do livro emprestado (chave estrangeira, referenciando Livros).
-- **usuario_id**: ID do usuário que realizou o empréstimo (chave estrangeira, referenciando Usuarios).
-- **data_emprestimo**: Data do empréstimo.
-- **data_devolucao**: Data da devolução.
+- **Livros**: Armazena informações sobre os livros, incluindo título, autor, gênero e ano de publicação.
+- **Usuarios**: Armazena informações sobre os usuários, incluindo nome e email.
+- **Emprestimos**: Registra os empréstimos dos livros pelos usuários, com referências às tabelas de livros e usuários. Inclui informações sobre a data do empréstimo e a data de devolução.
 
 ## Funcionalidades
 
-1. **Gerenciamento de Livros**:
-   - Adicionar novos livros ao catálogo.
-   - Atualizar informações de livros existentes.
-   - Excluir livros do catálogo.
-   - Buscar livros no catálogo por título, autor ou gênero.
-
-2. **Gerenciamento de Usuários**:
-   - Adicionar novos usuários.
-   - Atualizar informações de usuários existentes.
-   - Excluir usuários.
-   - Buscar usuários por nome ou email.
-
-3. **Empréstimo de Livros**:
-   - Registrar empréstimos de livros.
-   - Registrar devoluções de livros.
-   - Verificar a disponibilidade de um livro antes de realizar um empréstimo.
-
-4. **Relatórios**:
-   - Gerar relatórios de livros emprestados e devolvidos.
-   - Gerar relatórios de livros atualmente emprestados.
-   - Gerar relatórios de usuários com mais empréstimos.
-
-
+- **Inserção de Livros e Usuários**: Permite adicionar novos livros e usuários ao sistema.
+- **Empréstimos e Devoluções**: Registra os empréstimos e devoluções de livros, atualizando o estado do empréstimo conforme necessário.
+- **Atualizações e Exclusões**: Permite atualizar informações sobre livros e usuários, bem como excluir registros, com a devida remoção de dados relacionados.
+- **Relatórios e Consultas**: Gera relatórios detalhados e realiza consultas para listar livros, usuários e registros de empréstimos, incluindo a busca por gênero, título e autor de livros, além de identificar usuários com múltiplos empréstimos.
 
 ## Autor
-Desenvolvido por **Gustavo Martins**. Você pode entrar em contato comigo através do [LinkedIn](https://www.linkedin.com/in/gustavo-henrique-martins-1b031929b/).
+
+**Gustavo Martins**. Você pode entrar em contato comigo através do [LinkedIn](https://www.linkedin.com/in/gustavo-henrique-martins-1b031929b/).

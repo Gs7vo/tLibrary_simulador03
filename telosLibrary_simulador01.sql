@@ -1,87 +1,157 @@
---Criação do banco de dados 
+-- Criacao do banco de dados
 CREATE DATABASE tLibrary;
 
---Selecionar o banco de dados para uso
+-- Selecao do banco
 USE tLibrary;
 
---Criação da tabela Livros com ID auto-incrementado
+-- Tabela Livros
 CREATE TABLE Livros (
-    livro_id INT PRIMARY KEY IDENTITY(1,1),
-    titulo VARCHAR(255),
-    autor VARCHAR(255),
-    genero VARCHAR(100),
-    ano_publicacao INT
+    livro_id INT PRIMARY KEY IDENTITY(1,1),  
+    titulo VARCHAR(255) NOT NULL,  
+    autor VARCHAR(255) NOT NULL,   
+    genero VARCHAR(100) NOT NULL,  
+    ano_publicacao INT NOT NULL    
 );
 
---Criação da tabela Usuarios com ID auto-incrementado, nome e email
+-- Tabela Usuarios
 CREATE TABLE Usuarios (
-    usuario_id INT PRIMARY KEY IDENTITY(1,1),
-    nome VARCHAR(255),
-    email VARCHAR(255)
+    usuario_id INT PRIMARY KEY IDENTITY(1,1),  
+    nome VARCHAR(255) NOT NULL,  
+    email VARCHAR(255) NOT NULL  
 );
 
---Criação da tabela Emprestimos com FK referenciando Livros e Usuarios, além de campos de data
+-- Tabela de Emprestimos
 CREATE TABLE Emprestimos (
-    emprestimo_id INT PRIMARY KEY IDENTITY(1,1),
-    livro_id INT,
-    usuario_id INT,
-    data_emprestimo DATE,
-    data_devolucao DATE,
-    FOREIGN KEY (livro_id) REFERENCES Livros(livro_id),
-    FOREIGN KEY (usuario_id) REFERENCES Usuarios(usuario_id)
+    emprestimo_id INT PRIMARY KEY IDENTITY(1,1),  
+    livro_id INT NOT NULL,  
+    usuario_id INT NOT NULL,  
+    data_emprestimo DATE NOT NULL DEFAULT GETDATE(),  
+    data_devolucao DATE NULL,  
+    FOREIGN KEY (livro_id) REFERENCES Livros(livro_id) ON DELETE CASCADE,  
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(usuario_id) ON DELETE CASCADE 
 );
 
---Inserção de livros na tabela Livros
+-- Insercao de alguns livros iniciais na tabela Livros
 INSERT INTO Livros (titulo, autor, genero, ano_publicacao)
 VALUES 
-('Dom Casmurro', 'Machado de Assis', 'Romance', 1899),
-('Os Lusíadas', 'Luís de Camões', 'Épico', 1572),
-('O Guarani', 'José de Alencar', 'Romance', 1857),
-('Memórias Póstumas de Brás Cubas', 'Machado de Assis', 'Romance', 1881),
-('Grande Sertão: Veredas', 'João Guimarães Rosa', 'Romance', 1956),
-('Capitães da Areia', 'Jorge Amado', 'Romance', 1937);
+('Post Office', 'Charles Bukowski', 'Literatura Contemporanea', 1971),
+('Eu e Outras Poesias', 'Augusto dos Anjos', 'Poesia', 1912),
+('Sapiens: Uma Breve Historia da Humanidade', 'Yuval Noah Harari', 'Historia', 2011),
+('Cosmos', 'Carl Sagan', 'Divulgacao Cientifica', 1980),
+('Grande Sertao: Veredas', 'Joao Guimaraes Rosa', 'Romance', 1956),
+('Capitaes da Areia', 'Jorge Amado', 'Romance', 1937);
 
---Inserção de usuários 
+-- Insercao de usuarios
 INSERT INTO Usuarios (nome, email)
 VALUES 
 ('Pedro Bala', 'pedrobala.capitaes@areia.com'),
-('Professor', 'professor.capitaes@areia.com'),
+('Joao Grande', 'joaogrande.capitaes@areia.com'),
 ('Sem-Pernas', 'sempernas.capitaes@areia.com'),
-('Gato', 'gato.capitaes@areia.com');
+('Sinha', 'sinha.capitaes@areia.com');
 
---Inserção de empréstimos com referência a livros e usuários existentes
+-- Insercao de emprestimos iniciais
 INSERT INTO Emprestimos (livro_id, usuario_id, data_emprestimo)
-VALUES (1, 1, '2024-02-01'),
-       (2, 2, '2024-07-02'),
-       (3, 3, '2024-04-03'),
-       (4, 4, '2024-09-04');
+VALUES 
+(1, 1, GETDATE()),  
+(2, 2, GETDATE()),  
+(3, 3, GETDATE()),  
+(4, 4, GETDATE()); 
 
---Consulta para recuperar todos os registros da tabela Livros
-SELECT * FROM Livros;
+-- Mais emprestimos para o usuario 'Sem-Pernas'
+INSERT INTO Emprestimos (livro_id, usuario_id, data_emprestimo)
+VALUES 
+(5, 3, GETDATE()), 
+(6, 3, GETDATE());  
 
---Atualização do título de um livro específico (livro_id = 1)
+-- Adicao de um novo livro
+INSERT INTO Livros (titulo, autor, genero, ano_publicacao)
+VALUES ('A Arte da Guerra', 'Maquiavel', 'Taticas de Guerra', 1532);
+
+-- Adicao de um novo usuario
+INSERT INTO Usuarios (nome, email)
+VALUES ('Gustavo', 'gustavo@email.com');
+
+-- Atualizacao do titulo de um livro existente
 UPDATE Livros
-SET titulo = 'Dom Casmurro (Edição Especial)'
+SET titulo = 'Post Office (Edicao Especial)'
 WHERE livro_id = 1;
 
---Deleção de um livro específico (livro_id = 5)
-DELETE FROM Livros WHERE livro_id = 5;
+-- Atualizacao do nome e email de um usuario
+UPDATE Usuarios
+SET nome = 'Pedro Bala (Capitao)', email = 'pedro.capitao@areia.com'
+WHERE usuario_id = 1;
 
---Consulta para verificar todos os empréstimos que ainda não possuem data de devolução
+-- Atualizacao do genero e ano de publicacao de um livro
+UPDATE Livros
+SET genero = 'Romance Contemporaneo', ano_publicacao = 1972
+WHERE livro_id = 1;
+
+-- Exclusao de um livro 
+DELETE FROM Livros WHERE livro_id = 4;
+
+-- Exclusao de um usuario, o que tambem removera seus emprestimos
+DELETE FROM Usuarios WHERE usuario_id = 4;
+
+-- Relatorio de todos os livros
+SELECT * FROM Livros;
+
+-- Consulta por genero de livros
+SELECT * FROM Livros WHERE genero = 'Romance';
+
+-- Consulta por titulo de livro 
+SELECT * FROM Livros WHERE titulo LIKE '%Capitaes da Areia%';
+
+-- Consulta por autor
+SELECT * FROM Livros WHERE autor LIKE '%Charles Bukowski%';
+
+-- Relatorio de todos os livros atualmente emprestados, quem emprestou e a data
 SELECT Livros.titulo, Usuarios.nome, Emprestimos.data_emprestimo
 FROM Emprestimos
 JOIN Livros ON Emprestimos.livro_id = Livros.livro_id
 JOIN Usuarios ON Emprestimos.usuario_id = Usuarios.usuario_id
 WHERE Emprestimos.data_devolucao IS NULL;
 
---Consulta para verificar os livros atualmente emprestados e os usuários correspondentes
+-- Relatorio de usuarios com 3 ou mais emprestimos
+SELECT u.nome 
+FROM Usuarios u
+WHERE (SELECT COUNT(*) FROM Emprestimos e WHERE e.usuario_id = u.usuario_id) >= 3;
+
+-- Funcao para calcular o numero total de emprestimos de um usuario especifico
+CREATE FUNCTION TotalLoans (@user_id INT)
+RETURNS INT
+AS
+BEGIN
+    RETURN (SELECT COUNT(*) FROM Emprestimos WHERE usuario_id = @user_id);
+END;
+
+-- Relatorio de livros emprestados
 SELECT Livros.titulo, Usuarios.nome, Emprestimos.data_emprestimo
 FROM Emprestimos
 JOIN Livros ON Emprestimos.livro_id = Livros.livro_id
 JOIN Usuarios ON Emprestimos.usuario_id = Usuarios.usuario_id
 WHERE Emprestimos.data_devolucao IS NULL;
 
---Consulta para listar usuários com mais de 2 empréstimos usando uma subquery
-SELECT Usuarios.nome
-FROM Usuarios
-WHERE (SELECT COUNT(*) FROM Emprestimos WHERE Emprestimos.usuario_id = Usuarios.usuario_id) > 2;
+-- Relatorio de usuarios com mais emprestimos, ordenado por quantidade de emprestimos
+SELECT Usuarios.nome, COUNT(*) AS total_emprestimos
+FROM Emprestimos
+JOIN Usuarios ON Emprestimos.usuario_id = Usuarios.usuario_id
+GROUP BY Usuarios.nome
+ORDER BY total_emprestimos DESC;
+
+-- Registro da devolucao de um livro
+UPDATE Emprestimos
+SET data_devolucao = GETDATE()
+WHERE emprestimo_id = 2;
+
+-- Verificacao da devolucao registrada
+SELECT * FROM Emprestimos WHERE emprestimo_id = 2;
+
+-- Verificacao de disponibilidade de um livro antes de realizar um novo emprestimo
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1 FROM Emprestimos
+        WHERE livro_id = 2 AND data_devolucao IS NULL
+    )
+    THEN 'Indisponivel'
+    ELSE 'Disponivel'
+END AS disponibilidade;
